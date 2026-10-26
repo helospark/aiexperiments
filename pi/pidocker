@@ -1,0 +1,14 @@
+#!/bin/bash
+# This script uses an absolute path for pi-agent-home
+# Modify PI_AGENT_HOME_PATH below to change the default location
+# NOTE: Copy this script to /usr/local/bin/ or /bin/ for easy invocation
+PI_AGENT_HOME_PATH="/home/$USER/pi/pi-agent-home"
+
+# Run docker with current user ID to preserve file ownership
+docker run --rm -it \
+  --user "$(id -u):$(id -g)" \
+  -v "$(realpath "$PI_AGENT_HOME_PATH"):/home/node/.pi/agent" \
+  -v "$PWD:/workspace" \
+  -e PI_CODING_AGENT_DIR='/home/node/.pi/agent' \
+  --add-host=host.docker.internal:host-gateway \
+  pi_docker
